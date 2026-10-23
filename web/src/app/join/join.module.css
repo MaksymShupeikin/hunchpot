@@ -1,0 +1,43 @@
+/* sign-in: the composer's full-bleed screen, form at the thumb */
+.screen {
+  position: relative;
+  width: min(100%, var(--app-w));
+  height: 100dvh;
+  margin: 0 auto;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, #0e0e1299 0%, #0e0e1200 14%, #0e0e1200 26%, #0e0e12d1 50%, var(--void) 78%);
+}
+
+.top {
+  position: absolute;
+  inset: calc(var(--safe-t) + 14px) 14px auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #0e0e12a6;
+}
+
+.body {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 16px calc(var(--safe-b) + 28px);
+}

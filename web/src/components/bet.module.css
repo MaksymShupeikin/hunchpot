@@ -1,0 +1,297 @@
+/* one bet = one full viewport */
+.screen {
+  position: relative;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.field svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* print grain over the fields and shapes, so the media reads as material, not a CSS fill */
+.field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.28;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* a new split glides into place after a stake */
+.move {
+  transition: transform 0.9s var(--ease-out);
+}
+
+/* keeps the top bar readable; the text below brings its own shade */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, #0e0e12b3 0%, #0e0e1200 15%);
+}
+
+.body {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px calc(var(--nav-h) + var(--safe-b) + 16px);
+}
+
+/* the shade is anchored to the text, not the screen: it starts 160px above the first line however long the question is */
+.body::before {
+  content: "";
+  position: absolute;
+  inset: -160px 0 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    #0e0e1200 0,
+    #0e0e1294 90px,
+    #0e0e12d1 160px,
+    #0e0e12f2 55%,
+    var(--void) 100%
+  );
+  pointer-events: none;
+}
+
+.q {
+  font-family: var(--font-d);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  /* the longest word must fit the column: Dela caps run about 0.9em per character */
+  font-size: max(20px, min(var(--size), calc(100cqi / (var(--len) * 0.95))));
+  overflow-wrap: anywhere;
+  text-shadow: 0 2px 14px #0e0e1299;
+}
+
+.qL {
+  --size: clamp(38px, 15.5cqi, 56px);
+}
+
+.qM {
+  --size: clamp(32px, 12.5cqi, 46px);
+}
+
+.qS {
+  --size: clamp(27px, 10cqi, 36px);
+}
+
+.byline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.host,
+.crowd {
+  transition: transform 0.25s var(--ease-out);
+}
+
+.host:active,
+.crowd:active {
+  transform: scale(0.95);
+}
+
+.host {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  padding: 3px 12px 3px 3px;
+  border-radius: 999px;
+  background: #ffffff1f;
+}
+
+.handle {
+  overflow: hidden;
+  font: 800 14px/1 var(--font-u);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crowd {
+  display: flex;
+  flex: none;
+}
+
+.crowd > * {
+  outline: 2px solid var(--void);
+}
+
+.crowd > * + * {
+  margin-left: -8px;
+}
+
+.more {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--raised-2);
+  font: 800 12px/1 var(--font-u);
+  color: var(--text);
+}
+
+/* pot and time: the numbers that decide a bet */
+.stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* shrinks for long pots so the time chip always keeps its place (202px = padding, label, gap, widest chip) */
+.pot b {
+  font: 400 min(36px, calc((100cqi - 202px) / (var(--chars) * 0.9))) / 1 var(--font-d);
+  white-space: nowrap;
+}
+
+.pot span {
+  align-self: flex-end;
+  margin-bottom: 3px;
+  font: 800 12px/1 var(--font-u);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.left {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px 0 9px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--void);
+  flex: none;
+  font: 400 17px/1 var(--font-d);
+  text-transform: uppercase;
+  white-space: nowrap;
+  --icon-tint: var(--o1-br);
+}
+
+/* over: the chip goes quiet, the result below says what happened */
+.left[data-ended] {
+  background: var(--raised-2);
+  color: var(--text-2);
+  --icon-tint: transparent;
+}
+
+/* under an hour left */
+.left[data-soon] {
+  background: var(--o1-br);
+  --icon-tint: #ffffff8c;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 20px;
+  border-radius: 20px;
+  color: var(--void);
+  font: 800 16px/1 var(--font-u);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  --icon-tint: #ffffff66;
+}
+
+.resultWait {
+  background: var(--raised-2);
+  color: var(--text-2);
+  --icon-tint: transparent;
+}
+
+.resultLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.resultNet {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font: 400 24px/1 var(--font-d);
+}
+
+.resultNet small {
+  font: 800 11px/1 var(--font-u);
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.head {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* the question column is its own container, so type is sized to the space left of the rail */
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  container-type: inline-size;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-right: -6px;
+}
+
+.railBtn {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #0e0e1280;
+  color: var(--text);
+  transition: transform 0.25s var(--ease-out);
+}
+
+.railBtn:active {
+  transform: scale(0.9);
+}
+
+.railBtn[data-on] {
+  background: var(--text);
+  color: var(--void);
+}

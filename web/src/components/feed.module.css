@@ -1,0 +1,166 @@
+.feed {
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+}
+
+/* a sheet is modal: the feed under it must not scroll along with a drag on the sheet */
+:global(body:has(dialog[open])) .feed {
+  overflow: hidden;
+}
+
+.feed::-webkit-scrollbar {
+  display: none;
+}
+
+.top {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, var(--app-w));
+  padding: calc(var(--safe-t) + 12px) 14px 0 16px;
+  translate: -50% 0;
+  pointer-events: none;
+}
+
+.top > * {
+  pointer-events: auto;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: -10px; /* first label lines up with the question below */
+}
+
+.tabs a {
+  padding: 10px;
+  font: 800 16px/1 var(--font-u);
+  color: #ffffffb3;
+  text-shadow: 0 1px 6px #0006;
+  transition: color 0.2s;
+}
+
+.tabs a[aria-current="page"] {
+  color: var(--text);
+  text-decoration: underline 3px;
+  text-underline-offset: 8px;
+}
+
+.balance {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 12px 0 9px;
+  border-radius: 999px;
+  background: #0e0e12a6;
+  font: 800 14px/1 var(--font-u);
+  --icon-tint: var(--o2-br);
+}
+
+/* position in the feed, fixed over every bet like the top bar */
+.dotsLayer {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 5;
+  width: min(100%, var(--app-w));
+  translate: -50% 0;
+  pointer-events: none;
+}
+
+.dots {
+  position: absolute;
+  top: calc(var(--safe-t) + 68px);
+  right: 14px; /* same inset as the balance pill above it */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #ffffff73;
+  box-shadow: 0 1px 4px #0006;
+  transition: height 0.3s var(--ease-out), background 0.3s;
+}
+
+.dots i[data-on] {
+  height: 18px;
+  background: var(--text);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 20px;
+  height: 100dvh;
+  padding: 0 20px calc(var(--nav-h) + var(--safe-b) + 40px);
+  background:
+    radial-gradient(90% 60% at 20% 20%, var(--o0-lo), transparent 70%),
+    radial-gradient(90% 60% at 90% 40%, var(--o1-lo), transparent 70%);
+}
+
+.emptyTitle {
+  font: 400 46px/1 var(--font-d);
+  text-transform: uppercase;
+}
+
+.emptyCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 56px;
+  padding: 0 22px;
+  border-radius: 18px;
+  background: var(--text);
+  color: var(--void);
+  font: 800 16px/1 var(--font-u);
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  height: 100dvh;
+  padding: 0 16px calc(var(--nav-h) + var(--safe-b) + 16px);
+  background: linear-gradient(100deg, var(--o0-lo) 0 50%, var(--o1-lo) 50%);
+}
+
+.skeleton span {
+  height: 40px;
+  border-radius: 12px;
+  background: #ffffff1f;
+  animation: breathe 1.2s ease-in-out infinite alternate;
+}
+
+.skeleton span:nth-child(1) {
+  width: 80%;
+}
+
+.skeleton span:nth-child(2) {
+  width: 55%;
+}
+
+.skeleton span:nth-child(3) {
+  height: 64px;
+  margin-top: 12px;
+}
+
+@keyframes breathe {
+  to {
+    opacity: 0.4;
+  }
+}

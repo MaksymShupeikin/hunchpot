@@ -1,0 +1,368 @@
+.sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* lit pill in the outcome's color: the bottom edge of its field */
+.side {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 64px;
+  padding: 0 16px 0 18px;
+  border-radius: 20px;
+  color: var(--void);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--c) 62%, white) 0%,
+    var(--c) 42%,
+    color-mix(in oklab, var(--c) 72%, black) 100%
+  );
+  box-shadow: inset 0 2px 0 #ffffff8c, inset 0 -3px 0 #0000002e, 0 12px 20px -12px #000;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.side:active {
+  transform: scale(0.96) translateY(1px);
+}
+
+.side:disabled {
+  background: var(--raised-2);
+  color: var(--text-3);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.sideLabel {
+  overflow: hidden;
+  font: 800 15px/1 var(--font-u);
+  letter-spacing: 0.04em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sideOdds {
+  flex: none;
+  font: 400 26px/1 var(--font-d);
+}
+
+/* your side: label on top, your stake → payout under it */
+.side[data-mine] {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  container-type: inline-size;
+}
+
+.side[data-mine] .sideLabel {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.sidePos {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  max-width: 100%;
+  font: 800 min(17px, calc(100cqi / (var(--chars) * 0.62))) / 1 var(--font-u);
+  white-space: nowrap;
+}
+
+.sides[data-many] .side {
+  height: 54px;
+}
+
+.sides[data-many] .sideOdds {
+  font-size: 21px;
+}
+
+/* stake sheet */
+.sheet {
+  --p: 0;
+  position: fixed;
+  inset: auto 0 0;
+  width: min(100%, var(--app-w));
+  max-width: none;
+  max-height: 92dvh;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-top: 2.5px solid var(--c, var(--text)); /* the sheet's own colour: the side you are staking on, white for everyone */
+  border-radius: 28px 28px 0 0;
+  background: var(--raised);
+  color: var(--text);
+}
+
+/* the sheet is focused on open so no control starts ringed; its coloured edge is the cue */
+.sheet:focus-visible {
+  outline: none;
+}
+
+/* a drag on the sheet never chains into the page behind it */
+.sheet {
+  overscroll-behavior: contain;
+}
+
+.sheet[open] {
+  animation: rise 0.5s var(--ease-out);
+}
+
+.sheet::backdrop {
+  background: #0e0e12c2;
+}
+
+/* the chosen side's lit field rises from the bottom and fills the sheet as the puck travels */
+.sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 30% 12%, var(--hi), var(--d) 48%, var(--lo));
+  clip-path: inset(calc((1 - var(--p)) * 100%) 0 0 0);
+  pointer-events: none;
+  transition: clip-path 0.45s var(--ease-out);
+}
+
+.sheet:has([data-dragging])::before {
+  transition: none;
+}
+
+@keyframes rise {
+  from {
+    translate: 0 100%;
+  }
+}
+
+.body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  container-type: inline-size;
+  padding: 14px 18px calc(22px + var(--safe-b));
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pick {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--c);
+  color: var(--void);
+  font: 800 15px/1 var(--font-u);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pick b {
+  font: 400 18px/1 var(--font-d);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--raised-2);
+}
+
+/* stake and win: the same outlined numerals, sized together to fit the sheet */
+.amount,
+.win {
+  font: 400 min(88px, calc(100cqi / (var(--chars) * 0.95))) / 1 var(--font-d);
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--text);
+}
+
+/* only the number itself is the field; the space beside it is for tapping the keyboard away */
+.amount {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  padding-top: 6px;
+  cursor: text;
+}
+
+.amount[data-over] {
+  -webkit-text-stroke-color: var(--o1-hi);
+}
+
+/* an input that is exactly as wide as what is typed in it */
+.grow {
+  display: inline-grid;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.grow:has(input:focus) {
+  border-bottom-color: var(--c);
+}
+
+.grow::after {
+  content: attr(data-value);
+  grid-area: 1 / 1;
+  visibility: hidden;
+  white-space: pre;
+}
+
+.grow input {
+  grid-area: 1 / 1;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: transparent;
+  -webkit-text-stroke: inherit;
+  caret-color: var(--c);
+  outline: none;
+}
+
+.grow input::placeholder {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--text-3);
+}
+
+.winLabel {
+  margin: -6px 0 -10px;
+  font: 800 11px/1 var(--font-u);
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.win {
+  -webkit-text-stroke-color: var(--c);
+}
+
+/* nothing typed yet: the payout waits in the placeholder's grey */
+.win[data-empty] {
+  -webkit-text-stroke-color: var(--text-3);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.chip {
+  min-width: 60px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--raised-2);
+  font: 800 15px/1 var(--font-u);
+  transition: background 0.2s, color 0.2s;
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--text);
+  color: var(--void);
+}
+
+.chip:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.track {
+  --p: 0;
+  --max: 0px;
+  position: relative;
+  height: 64px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--raised-2);
+  touch-action: none;
+}
+
+.flood {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--p) * var(--max) + 64px);
+  border-radius: inherit;
+  background: color-mix(in oklab, var(--c) 55%, var(--raised-2));
+}
+
+.trackLabel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-left: 48px;
+  font: 800 13px/1 var(--font-u);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  opacity: calc(1 - var(--p) * 1.6);
+}
+
+.track[data-pending] .trackLabel {
+  opacity: 1;
+}
+
+.puck {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, var(--c) 62%);
+  color: var(--void);
+  box-shadow: 0 6px 12px -4px #000b;
+  transform: translateX(calc(var(--p) * var(--max)));
+  cursor: grab;
+  touch-action: none;
+}
+
+.track:not([data-dragging]) .puck,
+.track:not([data-dragging]) .flood {
+  transition: transform 0.4s var(--ease-out), width 0.4s var(--ease-out);
+}
+
+.track[data-dragging] .puck {
+  cursor: grabbing;
+}
+
+.track[data-pending] .puck {
+  animation: pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  to {
+    scale: 0.88;
+  }
+}
+
+.track[data-disabled] {
+  opacity: 0.45;
+}
+
+.error {
+  margin-top: -6px;
+  font: 700 14px/1.3 var(--font-u);
+  text-align: center;
+  color: var(--o1-hi);
+}

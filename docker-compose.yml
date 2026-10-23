@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: hunchpot
+      POSTGRES_PASSWORD: hunchpot
+      POSTGRES_DB: hunchpot
+    ports: ["127.0.0.1:5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hunchpot"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  # our own mail server for development: catches every email, inbox at http://localhost:8025
+  mail:
+    image: axllent/mailpit:v1.27
+    ports: ["127.0.0.1:8025:8025"]
+    restart: unless-stopped
+
+  api:
+    build: ./api
+    environment:
+      DATABASE_URL: postgresql+asyncpg://hunchpot:hunchpot@db:5432/hunchpot
+      SMTP_HOST: mail
+      SMTP_PORT: 1025
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      db:
+        condition: service_healthy
+      mail:
+        condition: service_started
+    restart: on-failure
+
+  web:
+    build: ./web
+    environment:
+      API_URL: http://api:8000
+    ports: ["3000:3000"]
+    depends_on: [api]
+
+volumes:
+  pgdata:

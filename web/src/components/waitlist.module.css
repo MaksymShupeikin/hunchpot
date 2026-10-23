@@ -1,0 +1,57 @@
+.screen {
+  position: relative;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, #0e0e1200 30%, #0e0e12d1 55%, var(--void) 80%);
+}
+
+.body {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px calc(var(--nav-h) + var(--safe-b) + 24px);
+}
+
+.title {
+  font: 400 clamp(36px, 12cqi, 52px) / 1 var(--font-d);
+  text-transform: uppercase;
+  text-wrap: balance;
+  text-shadow: 0 2px 14px #0e0e1299;
+}
+
+.count {
+  font: 600 16px/1.4 var(--font-u);
+  color: var(--text-2);
+}
+
+.count b {
+  font: 400 22px/1 var(--font-d);
+  color: var(--text);
+}
+
+.invite {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 58px;
+  border-radius: 20px;
+  background: var(--text);
+  color: var(--void);
+  font: 800 17px/1 var(--font-u);
+  transition: transform 0.25s var(--ease-out);
+}
+
+.invite:active {
+  transform: scale(0.97);
+}

@@ -1,0 +1,199 @@
+/* the crowd sheet reuses the stake sheet; only its list lives here */
+/* the list runs to the bottom edge of the screen and scrolls there */
+.body {
+  max-height: 92dvh;
+  padding-bottom: 0;
+}
+
+.list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 22px;
+  min-height: 0;
+  margin: 0 -18px;
+  padding: 2px 18px calc(28px + var(--safe-b));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* the host is set apart from the people who staked by a hairline */
+.hostCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.hostText {
+  min-width: 0;
+}
+
+.hostFace {
+  position: relative;
+  flex: none;
+}
+
+/* the host's crown sits on the avatar's lower right */
+.crown {
+  position: absolute;
+  right: -4px;
+  bottom: -2px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--void);
+  color: var(--text);
+  --icon-tint: var(--o2-br);
+}
+
+/* header pill: who first, then the pot, in the stake sheet's pick style; centred, not baseline (scoped to win over .pick) */
+.body .pill {
+  align-items: center;
+}
+
+/*
+ * Dela and Onest sit differently in their line boxes, so centring lines leaves the numbers uneven.
+ * Trimming each number to its cap height makes centring align the glyphs themselves.
+ */
+.num,
+.pill b,
+.sideHead b {
+  text-box: trim-both cap alphabetic;
+}
+
+.heads {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  --icon-tint: #0e0e1233;
+}
+
+.hostName {
+  overflow: hidden;
+  font: 400 24px/1.05 var(--font-d);
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.meta {
+  margin-top: 6px;
+  font: 600 13px/1.2 var(--font-u);
+  color: var(--text-2);
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sideHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 400;
+}
+
+.sideTag {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--c);
+  color: var(--void);
+  font: 800 13px/1 var(--font-u);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sideHead b {
+  font: 400 22px/1 var(--font-d);
+}
+
+/* head count of a side: the same people icon, its plate in the side colour */
+.count {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  font: 700 13px/1 var(--font-u);
+  color: var(--text-3);
+  --icon-tint: var(--c);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 8px 8px;
+  border-radius: 18px;
+  background: var(--raised-2);
+}
+
+.row[data-me] {
+  outline: 1.5px solid var(--c);
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  font: 600 12px/1.2 var(--font-u);
+  color: var(--text-3);
+}
+
+.who b,
+.who span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.who b {
+  font: 800 15px/1.2 var(--font-u);
+  color: var(--text);
+}
+
+.amount {
+  font: 400 20px/1 var(--font-d);
+}
+
+.empty {
+  padding: 14px 0;
+  font: 600 14px/1.3 var(--font-u);
+  text-align: center;
+  color: var(--text-2);
+}
+
+.retry {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.ghost {
+  height: 54px;
+  border-radius: 18px;
+  background: var(--raised-2);
+  animation: breathe 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+  to {
+    opacity: 0.45;
+  }
+}

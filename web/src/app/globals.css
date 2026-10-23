@@ -1,0 +1,126 @@
+:root {
+  --void: #0e0e12;
+  --raised: #17171f;
+  --raised-2: #20202a;
+  --line: #ffffff1f;
+  --text: #ffffff;
+  --text-2: #cfcedb;
+  --text-3: #a3a1b6;
+
+  /* outcome fields: base, highlight, shade, bright (buttons) */
+  --o0: #1e9e8c; --o0-hi: #6bebd6; --o0-lo: #0b5148; --o0-br: #3fd8bf;
+  --o1: #c23b5b; --o1-hi: #ff8aa2; --o1-lo: #651428; --o1-br: #ff5a7a;
+  --o2: #c08a1a; --o2-hi: #ffd772; --o2-lo: #5f4106; --o2-br: #ffc24b;
+  --o3: #5646c8; --o3-hi: #a99eff; --o3-lo: #251b6c; --o3-br: #8b7bff;
+
+  --font-d: var(--font-display), sans-serif;
+  --font-u: var(--font-ui), system-ui, sans-serif;
+
+  --nav-h: 76px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+  --app-w: 480px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: dark;
+  accent-color: var(--o0-br);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  background: var(--void);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--void);
+  color: var(--text);
+  font-family: var(--font-u);
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--o0-br);
+  color: var(--void);
+}
+
+input,
+textarea,
+button,
+select {
+  font: inherit;
+  color: inherit;
+  caret-color: var(--o0-br);
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2.5px solid var(--o2-br);
+  outline-offset: 3px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--raised-2) transparent;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* the outlined half of the display voice */
+.outline {
+  color: transparent;
+  -webkit-text-stroke: 0.045em var(--text);
+}
+
+/* avatar: a lit sphere in the user's hue */
+.avatar {
+  --h: 200;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--s, 28px);
+  height: var(--s, 28px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, hsl(var(--h) 90% 85%), hsl(var(--h) 65% 55%) 45%, hsl(var(--h) 60% 28%));
+  color: hsl(var(--h) 70% 12%);
+  font: 800 calc(var(--s, 28px) * 0.42) / 1 var(--font-u);
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

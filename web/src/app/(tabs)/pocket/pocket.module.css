@@ -1,0 +1,65 @@
+.wallet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 26px 20px 20px;
+  overflow: hidden;
+  border-radius: 28px;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 90% at 0% 0%, var(--o3-hi), transparent 55%),
+    radial-gradient(110% 90% at 100% 100%, var(--o0), transparent 60%),
+    var(--o3-lo);
+  box-shadow: inset 0 2px 0 #ffffff40, 0 24px 34px -24px #000;
+}
+
+/* the coin that gives the card its depth */
+.wallet::after {
+  content: "";
+  position: absolute;
+  top: -62px;
+  right: -58px;
+  z-index: -1;
+  width: 140px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #fff8d6, var(--o2-hi) 18%, var(--o2) 55%, var(--o2-lo));
+  box-shadow: 0 24px 30px -18px #000c;
+}
+
+.balance {
+  font: 400 clamp(52px, 17vw, 76px) / 1 var(--font-d);
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--text);
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  border-radius: 16px;
+  background: #0e0e1280;
+  font: 800 15px/1 var(--font-u);
+  --icon-tint: var(--o2-br);
+}
+
+.action:disabled {
+  color: var(--text-2);
+  cursor: not-allowed;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

@@ -1,0 +1,32 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 16px;
+  min-height: 100dvh;
+  padding: 0 16px calc(var(--nav-h) + var(--safe-b) + 28px);
+  background:
+    radial-gradient(90% 55% at 15% 25%, var(--o0-lo), transparent 70%),
+    radial-gradient(90% 55% at 95% 45%, var(--o1-lo), transparent 70%);
+}
+
+.title {
+  font: 400 clamp(36px, 12vw, 52px) / 1 var(--font-d);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.lead {
+  font: 600 16px/1.4 var(--font-u);
+  color: var(--text-2);
+}
+
+.cta {
+  display: grid;
+  place-items: center;
+  height: 58px;
+  border-radius: 20px;
+  background: var(--text);
+  color: var(--void);
+  font: 800 17px/1 var(--font-u);
+}
